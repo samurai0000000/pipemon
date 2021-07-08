@@ -13,5 +13,6 @@ while true; do
               -D 0.0.0.0:8080 \
 	      192.168.177.1 \
 	      cat
-    sleep 5
+    [ $? -eq 0 ] && exit 0
+    sleep 1
 done
