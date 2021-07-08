@@ -1,0 +1,26 @@
+This is a utility to monitor a process that it is echoing back via the
+stdin/stdout pipe correctly in a timely manner. The target applicaion
+is a ssh connection to a remote server to run forward/reverse/dynamic
+port fowarding and tunnelling, etc.
+
+The need to create this app arose due to unsatisfactory results obtained
+from adjusting TCPKeepAlive/ServerAliveCountMax/ServerAliveInterval parameters
+to keep a TCP connection open and detecting a dropped TCP connection as
+quickly as possible so a new connection can quickly be remade to restore
+connectivity (typically to keep a tunnel device interface alive). The easiest
+way is to pipe the ssh client stdin/stdout so that we can write a message
+in regular intervals and read a reply back to verify the result while checking
+so within a specified timeout. If this reply is not received, then we can
+kill the current process so that a new one may be started.
+
+E.g.,
+	pipemon ssh -v user@somewhere.org \
+		-L 0.0.0.0:12345:localhost:22 \
+		-R 0.0.0.0:12345:localhost:22 \
+		-D 0.0.0.0:8080 \
+		-w 0:0 \
+		cat
+
+
+For now, 'cat' is the best eternal process to invoke becaue this app
+write a string and expects an identical response to come back.
