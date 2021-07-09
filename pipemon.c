@@ -122,12 +122,6 @@ int main(int argc, char **argv)
 
             gettimeofday(&now, NULL);
 
-            if (now.tv_usec < t_send.tv_usec) {
-                int nsec = (t_send.tv_usec - now.tv_usec) / 1000000 + 1;
-                t_send.tv_usec -= 1000000 * nsec;
-                t_send.tv_sec += nsec;
-            }
-
             conntime = now.tv_sec - since.tv_sec;
             secs = conntime % 60;
             mins = conntime / 60;
@@ -135,6 +129,12 @@ int main(int argc, char **argv)
             hours = conntime / 3600;
             hours %= 24;
             days = conntime / 86400;
+
+            if (now.tv_usec < t_send.tv_usec) {
+                int nsec = (t_send.tv_usec - now.tv_usec) / 1000000 + 1;
+                t_send.tv_usec -= 1000000 * nsec;
+                t_send.tv_sec += nsec;
+            }
 
             if (now.tv_usec - t_send.tv_usec > 1000000) {
                 int nsec = (now.tv_usec - t_send.tv_usec) / 1000000;
