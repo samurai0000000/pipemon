@@ -18,7 +18,7 @@
 
 static pid_t pid = -1;
 static unsigned int interval = 1;
-static time_t timeout = 10;
+static time_t timeout = 60;
 
 static void execute(int argc, char **argv);
 
@@ -36,11 +36,41 @@ static void sighandler(int signum)
 int main(int argc, char **argv)
 {
     int ret = 0;
+    char *s;
     int pin[2];
     int pout[2];
     struct timeval since;
     struct timeval now;
     time_t conntime, secs, mins, hours, days;
+
+    if ((s = getenv("PIPEMON_INTERVAL")) != NULL) {
+        long int v;
+        char *endptr;
+
+        v = strtol(s, &endptr, 10);
+        if ((*endptr != '\0') || (s == endptr) || (v < 0)) {
+            fprintf(stderr, "Invalid PIPEMON_INTERVAL=%s\n", s);
+            exit(EXIT_FAILURE);
+        } else {
+            interval = (unsigned int) v;
+        }
+    }
+
+    if ((s = getenv("PIPEMON_TIMEOUT")) != NULL) {
+        long int v;
+        char *endptr;
+
+        v = strtol(s, &endptr, 10);
+        if ((*endptr != '\0') || (s == endptr) || (v < 0)) {
+            fprintf(stderr, "Invalid PIPEMON_TIMEOUT=%s\n", s);
+            exit(EXIT_FAILURE);
+        } else {
+            timeout = (time_t) v;
+        }
+    }
+
+    fprintf(stderr, "interval=%u\n", interval);
+    fprintf(stderr, "timeout=%zu\n", timeout);
 
     signal(SIGINT, sighandler);
     signal(SIGPIPE, SIG_IGN);
