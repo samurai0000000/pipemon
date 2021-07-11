@@ -24,3 +24,19 @@ E.g.,
 
 For now, 'cat' is the best eternal process to invoke becaue this app
 write a string and expects an identical response to come back.
+
+Parameters to control pipemon:
+
+interval:   Number of seconds to wait between successful stdout output
+timeout:    Time out value to quit with error if there is no reply
+threshold_rtt:   The round-trip-time uppwer limit to consider the connection
+                 to be too slow or unresponsive
+threshold_count: Number of successive times where threshold_rtt is beached
+                 to quit with error
+
+Parameters via environment variables:
+
+PIPEMON_INTERVAL
+PIPEMON_TIMEOUT
+PIPEMON_THRESHOLD_RTT
+PIPEMON_THRESHOLD_COUNT

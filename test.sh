@@ -1,5 +1,10 @@
 #!/bin/sh
 
+PIPEMON_INTERVAL=5
+PIPEMON_TIMEOUT=60
+PIPEMON_THRESHOLD_RTT=2.5
+PIPEMON_THRESHOLD_COUNT=3
+
 while true; do
     ./pipemon ssh -v \
 	      -o ExitOnForwardFailure=yes \
