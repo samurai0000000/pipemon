@@ -22,9 +22,9 @@ static unsigned int interval = 1;
 static time_t timeout = 60;
 static struct timeval threshold_rtt = {
     .tv_sec = 0,
-    .tv_usec = 500000,
+    .tv_usec = 0,
 };
-static unsigned int threshold_count = 5;
+static unsigned int threshold_count = 0;
 
 static void execute(int argc, char **argv);
 
@@ -215,7 +215,8 @@ int main(int argc, char **argv)
             rtt.tv_sec = now.tv_sec - t_send.tv_sec;
             rtt.tv_usec = now.tv_usec - t_send.tv_usec;
 
-            if (threshold_count != 0) {
+            if (threshold_count != 0 &&
+                !(threshold_rtt.tv_sec == 0 && threshold_rtt.tv_usec == 0)) {
                 if ((rtt.tv_sec > threshold_rtt.tv_sec) ||
                     ((rtt.tv_sec == threshold_rtt.tv_sec) &&
                      (rtt.tv_usec > threshold_rtt.tv_usec))) {
