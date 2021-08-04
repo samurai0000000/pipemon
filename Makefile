@@ -3,18 +3,21 @@
 #
 # Copyright (C) 2021, Charles Chiou
 
-CC =		gcc
+CC ?=		gcc
 CFLAGS =	-Wall -O3 -g
 LDFLAGS =
+RM ?=		rm -f
 
 .PHONY: default clean distclean
 
 TARGETS =	pipemon
 
+OBJS =		pipemon.o
+
 default: $(TARGETS)
 
-pipemon: pipemon.o
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+pipemon: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS)
 
 %.o: %.c $(wildcard *.h)
 	$(CC) $(CFLAGS) -c $< -o $@

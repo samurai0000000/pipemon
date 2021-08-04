@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <sys/time.h>
+#include <signal.h>
 #include <math.h>
 
 static pid_t pid = -1;
@@ -107,7 +108,7 @@ int main(int argc, char **argv)
     }
 
     fprintf(stderr, "interval: %u\n", interval);
-    fprintf(stderr, "timeout:  %zu\n", timeout);
+    fprintf(stderr, "timeout:  %lu\n", timeout);
     fprintf(stderr, "threshold_rtt:   %lu.%lu\n",
             threshold_rtt.tv_sec, threshold_rtt.tv_usec);
     fprintf(stderr, "threshold_count: %u\n", threshold_count);
@@ -238,7 +239,7 @@ int main(int argc, char **argv)
                 printf("alive: %.2lu:%.2lu:%.2lu (rtt=%lu.%.6lus)\n",
                        hours, mins, secs, rtt.tv_sec, rtt.tv_usec);
             }
-        } while(1);
+        }
     }
 
 done:
@@ -247,9 +248,7 @@ done:
         kill(pid, SIGINT);
     }
 
-    if (ret == 0) {
-        exit(0);
-    } else {
+    if (ret != 0) {
         exit(EXIT_FAILURE);
     }
 
